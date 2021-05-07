@@ -6,7 +6,7 @@ const post = new mongoose.Schema({
     country: String,
     state: String,
     city: String,
-    authorId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    authorId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
     comment: [commentSchema],
 });
 
