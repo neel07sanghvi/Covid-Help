@@ -14,7 +14,7 @@ export default function FeedPost(props) {
             <div className="col-12 d-flex flex-column" style={{rowGap: "1rem"}}>
                 <div className="d-flex align-items-center" style={{columnGap: "1rem"}}>
                     <img src={flower} width={70} height={70} className="rounded-circle border border-info border-3"></img>
-                    <p className="fw-bold fs-4">{props.authorId.username}</p>
+                    <p className="fw-bold fs-4">{props.username}</p>
                 </div>
                 <p>
                     <p className={"mt-2 w-100 fw-normal "+ (!readMore ? " read-less" : "")}>{props.caption}</p>

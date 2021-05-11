@@ -7,19 +7,16 @@ import Signup from './components/Signup';
 import Filter from './components/Filter';
 import Profile from './components/Profile';
 import AddPost from './components/AddPost';
+import Home from './components/Home';
 
 function App () {
     return (
         <Router> 
-            {/* <Login/>
-            <Signup/> */}
-            {/* <NavLink to="/login"> {Login} </NavLink> */}
+            <Navigation/>
             <Switch>
               <Route exact path="/">
-                <Navigation/>
-                <Filter/>
-                <Feed/>
-                <AddPost/>
+                
+                <Home></Home>
               </Route>
               <Route exact path="/login">
                 <Login/>
