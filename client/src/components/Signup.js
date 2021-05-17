@@ -36,7 +36,7 @@ export default function Signup() {
                     </div>
                 </div>
                 <div>
-                    <button type="submit" className="btn btn-primary">Sign in</button>
+                    <button type="submit" className="btn btn-primary">Sign up</button>
                 </div>
                 <p> Already a member ? <Link to="/login"> Sign In </Link></p>
             </form> 
