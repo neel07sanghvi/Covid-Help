@@ -19,6 +19,16 @@ body {
     position: relative;
 }
 
+.comment-form{
+    
+    border-bottom: 2px solid black;
+    input{
+        border: none;
+        outline: none;
+        padding: 0.3rem;
+    }
+}
+
 #root{
     min-width: 100vw;
     max-width: 100vw;

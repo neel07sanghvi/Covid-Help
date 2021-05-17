@@ -7,7 +7,10 @@ const post = new mongoose.Schema({
     state: String,
     city: String,
     authorId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
-    comment: [commentSchema],
+    comment: {
+        type: Number,
+        default: 0
+    },
 });
 
 mongoose.model('post' , post);
