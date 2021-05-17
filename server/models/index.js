@@ -13,4 +13,3 @@ mongoose.connect(url ,{ useNewUrlParser: true, useUnifiedTopology: true, useCrea
 require('./post.model');
 require('./comments.model');
 require('./user.model');
-
