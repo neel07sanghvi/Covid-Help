@@ -16,7 +16,6 @@ app.post('/insert',async (req,res) =>{
 
     User.save().then((result) => {
         if(!result){
-            // console.log(err);
             res.json(false);
         }
         else {

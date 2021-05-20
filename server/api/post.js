@@ -10,10 +10,10 @@ const postSchema = mongoose.model('post');
 
 app.post('/insert', (req,res) => {
     const Post = new postSchema({
-        caption: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
-        country: "Australia",
-        state: "Maharashtra",
-        city: "Ahm",
+        caption: req.body.caption,
+        country: req.body.country,
+        state: req.body.state,
+        city: req.body.city,
         authorId: mongoose.Types.ObjectId("6098cc9b54ad380a6c26309a"),
     })
 

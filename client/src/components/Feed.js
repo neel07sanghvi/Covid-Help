@@ -1,9 +1,7 @@
-import React , {useState , useEffect, useRef} from 'react';
+import React , {useRef} from 'react';
 import FeedPost from './FeedPost';
-import {slice , concat} from 'lodash';
-import { GetPost } from '../api/Post';
 import usePost from './usePost';
-
+import { AddPost } from '../api/Post';
 
     
 
@@ -15,6 +13,31 @@ function Feed() {
     const country = useRef("");
     const state = useRef("");
     const city = useRef("");
+
+    const description = useRef("");
+    const addCountry = useRef("");
+    const addState = useRef("");
+    const addCity = useRef("");
+
+    let HandleAddPost = async () => {
+        if(description.current.value === "" || addCountry.current.value === "" || addState.current.value === "" || addCity.current.value === "")
+        {
+            window.alert("Every Field is required")
+            return;
+        }
+
+        let addPostresponse = await AddPost(description.current.value , addCountry.current.value , addState.current.value , addCity.current.value)
+        description.current.value = "";
+        addCountry.current.value = "";
+        addCity.current.value = "";
+        addState.current.value = "";
+
+        let message = "Post Added Sucessfully...";
+        if(!addPostresponse){
+            message = "Ooops! Something went wrong.";
+        }
+        window.alert(message);
+    }
     
     return (
         <>
@@ -45,9 +68,36 @@ function Feed() {
                 {(list.length!==count && !loading) && <button className="btn btn-outline-secondary waves-effect" style={{paddingBottom: "5px", paddingTop: "5px", textAlign: "center", width: "30%" }} onClick={UpdatePage}> Load More </button>}    
                 </div>
             </div>
-             
-            <button className="btn btn-danger rounded-circle position-fixed" style={{left: "90%", bottom: "10%"}}> <i className="fa fa-plus"></i> </button>
-            
+            <button type="button" className="btn btn-danger rounded-circle position-fixed" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style={{left: "90%", bottom: "10%"}}> <i className="fa fa-plus"></i> </button>
+
+            <div className="modal fade myModal" id="staticBackdrop" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="staticBackdropLabel">Add Post</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-dialog modal-dialog-centered" style={{pointerEvents: 'auto'}}>
+                        <form className="mx-auto d-grid" style={{rowGap: "0.5rem"}}>
+                            <label>Description</label>
+                            <textarea rows="5" ref={description} required></textarea>
+                            {/* <label>Image</label>
+                            <input type="file"></input> */}
+                            <label>Country</label>
+                            <input ref={addCountry} required></input>
+                            <label>State</label>
+                            <input ref={addState} required></input>
+                            <label>City</label>
+                            <input ref={addCity} required></input>
+                        </form>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="AddPostBtn" className="btn btn-primary" onClick={HandleAddPost}>Add Post</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
