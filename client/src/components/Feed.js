@@ -22,7 +22,7 @@ function Feed() {
     let HandleAddPost = async () => {
         if(description.current.value === "" || addCountry.current.value === "" || addState.current.value === "" || addCity.current.value === "")
         {
-            window.alert("Every Field is required")
+            window.alert("Every Field is required");
             return;
         }
 

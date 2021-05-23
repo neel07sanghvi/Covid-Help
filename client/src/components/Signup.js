@@ -1,10 +1,41 @@
-import React from 'react';
+import React , {useRef} from 'react';
 import { Link } from 'react-router-dom';
+import { SignupAuthentication } from '../api/User';
 
 export default function Signup() {
+    // const { HandleQuery } = 
+    const password = useRef("");
+    const confirm_password = useRef("");
+    const username = useRef("");
+    const name = useRef("");
+    const email = useRef("");
+    const mobile = useRef("");
+
+    let HandleSignUp = async () => {
+        if(password.current.value === "" || confirm_password.current.value === "" || username.current.value === "" || name.current.value === "" || email.current.value === "" || mobile.current.value === "") 
+        {
+            window.alert("Every Field is required");
+            return;
+        }
+
+        let addPostresponse = await SignupAuthentication(password.current.value, username.current.value, name.current.value, email.current.value, mobile.current.value);
+
+        password.current.value = "";
+        username.current.value = "";
+        name.current.value = "";
+        email.current.value = "";
+        mobile.current.value = "";
+        
+        let message = "Registration Done Successfully...";
+        if(!addPostresponse){
+            message = "Ooops! Something went wrong.";
+        }
+        window.alert(message);
+    }
     return (
         <>
-            <form className="col-lg-6 col-md-6 col-10 mx-auto my-5 px-3 py-5 shadow d-flex flex-column align-items-center justify-content-between" style={{rowGap: "1rem" , overflowX: "hidden"}}>
+            <form className="col-lg-6 col-md-6 col-10 mx-auto my-5 px-3 py-5 shadow d-flex flex-column align-items-center justify-content-between" style={{rowGap: "1rem" , overflowX: "hidden"}}
+                onSubmit={(e) => {e.preventDefault();}}>
                 <div className="container">
                     <Link to="/"><i className="fa fa-arrow-left"></i></Link>
                 </div>
@@ -36,7 +67,7 @@ export default function Signup() {
                     </div>
                 </div>
                 <div>
-                    <button type="submit" className="btn btn-primary">Sign up</button>
+                    <button type="submit" className="btn btn-primary" onClick={HandleSignUp}>Sign up</button>
                 </div>
                 <p> Already a member ? <Link to="/login"> Sign In </Link></p>
             </form> 
