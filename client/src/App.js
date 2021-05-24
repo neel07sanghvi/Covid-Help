@@ -11,17 +11,18 @@ function App () {
       <Router> 
           <Navigation/>
           <Switch>
-            <Route exact path="/">
-              <Home></Home>
-            </Route>
+            
             <Route exact path="/login">
               <Login/>
             </Route>
-            <Route path="/signup">
+            <Route exact path="/signup">
               <Signup/>
             </Route>
             <Route path="/profile">
               <Profile/>
+            </Route>
+            <Route exact path="/">
+              <Home></Home>
             </Route>
         </Switch>
       </Router>
