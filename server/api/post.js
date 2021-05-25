@@ -92,11 +92,10 @@ app.get('/list',(req,res) => {
 
 
 app.post('/addComment',(req,res) => {
-    console.log(res.body)
     const comt = new CommentSchema({
         content: req.body.content,
         authorId: req.body.authorId,
-        postId: req.body._id
+        postId: req.body.postId
     })
 
     comt.save().then((doc) => {
