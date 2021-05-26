@@ -94,7 +94,7 @@ app.get('/list',(req,res) => {
 
 
 app.post('/addComment',(req,res) => {
-    console.log(res.body)
+    // console.log(res.body)
     const comt = new CommentSchema({
         content: req.body.content,
         authorId: req.body.authorId,
@@ -122,7 +122,7 @@ app.post('/addComment',(req,res) => {
 app.post('/commentList', (req,res) => {
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
-    console.log(req.body)   
+    // console.log(req.body)   
     CommentSchema.aggregate([
         {
             $match: {
