@@ -21,9 +21,22 @@ function Navigation(){
         <>
             <nav className="navbar navbar-light bg-white">
                 <div className="container d-flex justify-content-between align-item-center">
-                    <h2 className="text-dark"><Link to="/">Covid Help</Link></h2>
+                    <h2 className="text-dark"><Link to="/" style={{textDecoration: "none"}}>Covid Help</Link></h2>
 
-                    {user !== null ? <p>{user.username} <button onClick={logout}>logout</button></p> : <p className="text-dark p-0 m-0" ><Link to="/login">Login</Link> / <Link to="/signup">Register</Link></p>}
+                    {user !== null ? 
+                        <div className="dropdown">
+                            <div className="d-flex align-items-center" style={{columnGap: "0.5rem"}}>
+                                <i className="fa fa-user-circle-o"></i>
+                                <p>{user.username}</p>
+                            </div> 
+                             <div className="dropdown-content">
+                                    <a href="/profile">Profile</a>
+                                    <a onClick={logout}><i className="fa fa-sign-out"></i> Logout</a>
+                            </div>
+                              
+                        </div>
+                    : 
+                    <p className="text-dark p-0 m-0" ><Link to="/login">Login</Link> / <Link to="/signup">Register</Link></p>}
                     
                 </div>
             </nav>

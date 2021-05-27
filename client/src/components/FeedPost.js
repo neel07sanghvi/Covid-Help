@@ -77,7 +77,7 @@ export default function FeedPost(props) {
         <div className="col-lg-10 col-md-11 col-12 border-top border-dark rounded shadow bg-white mt-2 mb-3 mx-auto p-2 d-flex flex-column justify-content-between" style={{rowGap: '1rem'}}>
             <div className="col-12 d-flex flex-column" style={{rowGap: "1rem"}}>
                 <div className="d-flex align-items-center" style={{columnGap: "1rem"}}>
-                    <img src={flower} width={70} height={70} className="rounded-circle border border-info border-3"></img>
+                    <img src={flower} width={70} height={70} className="rounded-circle"></img>
                     <p className="fw-bold fs-4">{props.username}</p>
                 </div>
                 <p>
