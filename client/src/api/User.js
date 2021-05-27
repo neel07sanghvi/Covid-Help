@@ -1,3 +1,23 @@
+import { BehaviorSubject } from 'rxjs';
+
+
+let getUser = () => {
+    let token = localStorage.getItem("UserToken") || null;
+    console.log(token);
+    if(token === null){
+        return null;
+    }
+    else{
+        let payload = JSON.parse(atob(token.split('.')[1]));
+        return payload;
+    }
+} 
+
+const currentUser = new BehaviorSubject(getUser());
+
+
+
+
 async function SignupAuthentication(password,username,name,email,mobile) {
     return fetch('http://localhost:7000/api/user/register',{
         method: "POST",
@@ -18,4 +38,37 @@ async function SignupAuthentication(password,username,name,email,mobile) {
     })
 }
 
-export { SignupAuthentication };
+async function login(usernameOREmail,password){
+    return fetch('http://localhost:7000/api/user/login',{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            usernameOREmail: usernameOREmail,
+            password: password
+        })
+    }).then(res => res.json()).then(data => {
+
+        console.log(data)
+
+        if(data.status){
+            localStorage.setItem("UserToken",data.token);
+            currentUser.next(getUser());
+        }
+        return {
+            status: data.status,
+            mesage: data.message
+        }
+    }).catch(err => ({
+        status: false,
+        message: "Something went wrong"
+    }))
+}
+
+async function logout() {
+    window.localStorage.removeItem("UserToken");
+    currentUser.next(getUser());
+}
+
+export { SignupAuthentication, login, currentUser,logout };

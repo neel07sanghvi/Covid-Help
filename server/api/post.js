@@ -2,8 +2,6 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const app = express.Router();
 const mongoose = require('mongoose');
-const { post } = require('./user');
-const { response } = require('express');
 const CommentSchema = mongoose.model('comment');
 const postSchema = mongoose.model('post');
 
@@ -14,7 +12,7 @@ app.post('/insert', (req,res) => {
         country: req.body.country,
         state: req.body.state,
         city: req.body.city,
-        authorId: mongoose.Types.ObjectId("6098cc9b54ad380a6c26309a"),
+        authorId: mongoose.Types.ObjectId("60a9ee29a5a6319c50f540bd"),
     })
 
     Post.save().then(doc => {
@@ -98,7 +96,7 @@ app.post('/addComment',(req,res) => {
     const comt = new CommentSchema({
         content: req.body.content,
         authorId: req.body.authorId,
-        postId: req.body._id
+        postId: req.body.postId
     })
 
     comt.save().then((doc) => {

@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect, useRef } from 'react'
 import flower from './download.jfif';
+import { currentUser } from '../api/User'
+import {AddComment} from '../api/Post'
 
 export default function FeedPost(props) {
-    console.log(props);
     props = props.post
     const [readMore,setReadMore] = useState(false);
     const [openComment,setOpenComment] = useState(false);
@@ -11,6 +12,20 @@ export default function FeedPost(props) {
     const [page,setPage] = useState(1);
     const count = props.comment;
     const limit = 3;
+    const [user,setUser] = useState(null);
+    const commentContent = useRef("");
+
+    useEffect(() => {
+        const Observable = currentUser.subscribe((u) => {
+            setUser(u);
+        });
+
+        return () => {
+            Observable.unsubscribe();
+        }
+    },[])    
+    
+
     let Toggler = () => {
         setReadMore(!readMore);
     }
@@ -36,9 +51,7 @@ export default function FeedPost(props) {
     }
 
     let CommentToggle = ()=>{
-        console.log(openComment)
         if(openComment === false){
-            console.log(commentList)
             if(commentList.length === 0){
                 console.log("load")
                 loadComment();
@@ -47,13 +60,24 @@ export default function FeedPost(props) {
         setOpenComment(!openComment)
     }
 
-    
+    let HandleAddComment = async (e) => {
+        e.preventDefault();
+        if(user === null){
+            window.location = "/login";
+            return;
+        }
+        
+        else{
+            let AddCommentResponse = await AddComment(commentContent.current.value,user.id,props._id);
+
+        }
+    }
 
     return (
         <div className="col-lg-10 col-md-11 col-12 border-top border-dark rounded shadow bg-white mt-2 mb-3 mx-auto p-2 d-flex flex-column justify-content-between" style={{rowGap: '1rem'}}>
             <div className="col-12 d-flex flex-column" style={{rowGap: "1rem"}}>
                 <div className="d-flex align-items-center" style={{columnGap: "1rem"}}>
-                    <img src={flower} width={70} height={70} className="rounded-circle border border-info border-3"></img>
+                    <img src={flower} width={70} height={70} className="rounded-circle"></img>
                     <p className="fw-bold fs-4">{props.username}</p>
                 </div>
                 <p>
@@ -66,20 +90,28 @@ export default function FeedPost(props) {
                 <i className="fa fa-comment" style={{cursor: "pointer"}} onClick={CommentToggle}> Comment({count})</i>
                 <i className="fa fa-share" style={{cursor: "pointer"}}> Share</i>
             </div>
-            {openComment && <div className="d-flex flex-column justify-content-between align-items-start px-3 py-3" style={{overflowY: 'scroll',rowGap: "0.7rem",maxHeight: "200px"}}>
+            {openComment && <><div className="d-flex flex-column justify-content-between align-items-start px-3 py-3" style={{overflowY: 'scroll',rowGap: "0.7rem",maxHeight: "200px"}}>
                 {commentList.map(cmt => 
-                <div key={cmt._id} className="rounded bg-danger d-flex flex-column px-1 py-1" style={{rowGap: '0.5rem'}}>
+                <div key={cmt._id} className="rounded float-end d-flex flex-column px-1 py-1" style={{rowGap: '0.5rem'}}>
                     <div className="d-flex align-items-center" style={{columnGap: '0.5rem'}}><img src={flower} className="rounded-circle" style={{width: '30px',height: "30px"}}></img> <h6>{cmt.username}</h6></div>
                     <p>{cmt.content}</p>
                 </div> 
                 )}
                 
-                {commentList.length !== count && !loading && <a onClick={loadComment}>Load More</a>}
-                {loading && <b className="text-center">Loading....</b>}                
+                {/* {commentList.length !== count && !loading && <a onClick={loadComment}>Load More</a>} */}
+                {commentList.length !== count && !loading && <button className="btn btn-outline-secondary waves-effect" style={{paddingBottom: "2px", paddingTop: "2px", textAlign: "center", width: "20%" }} onClick={loadComment}> Load More </button>}
+                {loading && <b className="text-center">Loading....</b>}    
+
+                           
             </div>
+            <form onSubmit={(e) => HandleAddComment(e)} className="d-flex justify-content-between align-items-center px-3 mx-2 comment-form">
+            <input ref={commentContent} className="flex-grow-1" placeholder="Write a comment..."></input>
+            <button className="btn" type="submit"><i className="fa fa-send"></i></button>
+        </form> 
+        </>
             }
 
-            <form className="d-flex justify-content-between align-items-center px-3 mx-2 comment-form"><input className="flex-grow-1" placeholder="Write a comment..."></input><i className="fa fa-send"></i></form>
+            
         </div>
     )
 }

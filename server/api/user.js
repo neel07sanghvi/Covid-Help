@@ -63,6 +63,65 @@ app.post('/register',async (req,res) => {
     })
 })
 
+app.post('/login',(req,res) => {
+    if(req.body.usernameOREmail === "" || req.body.password === ""){
+        res.json({
+            status: false,
+            message: "Username and Password are required"
+        })
+        return;
+    }
+
+
+    let usernameOREmail = req.body.usernameOREmail;
+    let password = req.body.password;
+    user.findOne({$or: [{username: usernameOREmail},{email: usernameOREmail}]}).then((doc) => {
+        if(!doc){
+            res.json({
+                status: false,
+                message: "Incorrect Useranme or Password"
+            })
+        }
+        else{
+            bcrypt.compare(password,doc.password, (err,result) => {
+                if(err || !result){
+                    res.json({
+                        status: false,
+                        message: "Incorrect Useranme or Password"
+                    })
+                }
+                else{
+                    let User = {
+                        username: doc.username,
+                        id: doc._id
+                    }
+                    jwt.sign(User,process.env.SECRET_KEY, (err,token) => {
+                        if(err){
+                            res.json({
+                                status: false,
+                                message: "Something went wrong"
+                            })
+                        }
+                        else{
+                            res.json({
+                                status: true,
+                                message: "Loged In successfullly",
+                                token: token
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    }).catch(err => {
+        res.json({
+            status: false,
+            message: "Something went wrong"
+        })
+    })
+
+})
+
 
 module.exports = app;
    
