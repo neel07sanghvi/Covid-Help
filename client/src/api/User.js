@@ -58,7 +58,7 @@ async function login(usernameOREmail,password){
         }
         return {
             status: data.status,
-            mesage: data.message
+            message: data.message
         }
     }).catch(err => ({
         status: false,

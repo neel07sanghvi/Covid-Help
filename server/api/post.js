@@ -102,9 +102,9 @@ app.post('/addComment',(req,res) => {
     comt.save().then((doc) => {
         if(doc){
             // console.log(doc);
-            postSchema.findByIdAndUpdate(doc.postId,{$inc:{ comment: 1}},(err,doc) => {
-                if(doc){
-                    res.json(true);
+            postSchema.findByIdAndUpdate(doc.postId,{$inc:{ comment: 1}},(err,data) => {
+                if(data){
+                    res.json(doc);
                 }else{
                     res.json(false)
                 }

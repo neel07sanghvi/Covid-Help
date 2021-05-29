@@ -1,8 +1,8 @@
-import React , {useRef} from 'react';
+import React , {useRef , useState , useEffect} from 'react';
 import FeedPost from './FeedPost';
 import usePost from './usePost';
 import { AddPost } from '../api/Post';
-
+import { currentUser } from '../api/User'
     
 
 function Feed() {
@@ -19,7 +19,26 @@ function Feed() {
     const addState = useRef("");
     const addCity = useRef("");
 
+    const [user,setUser] = useState(null);
+
+    useEffect(() => {
+        const Observable = currentUser.subscribe((u) => {
+            setUser(u);
+        });
+
+        return () => {
+            Observable.unsubscribe();
+        }
+    },[])
+
     let HandleAddPost = async () => {
+
+        if(user === null)
+        {
+            window.location = "/login";
+            return;
+        }
+
         if(description.current.value === "" || addCountry.current.value === "" || addState.current.value === "" || addCity.current.value === "")
         {
             window.alert("Every Field is required");
@@ -68,8 +87,8 @@ function Feed() {
                 {(list.length!==count && !loading) && <button className="btn btn-outline-secondary waves-effect" style={{paddingBottom: "5px", paddingTop: "5px", textAlign: "center", width: "30%" }} onClick={UpdatePage}> Load More </button>}    
                 </div>
             </div>
-            <button type="button" className="btn btn-danger rounded-circle position-fixed" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style={{left: "90%", bottom: "10%"}}> <i className="fa fa-plus"></i> </button>
-
+            { (user !== null) && <button type="button" className="btn btn-danger rounded-circle position-fixed" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style={{right: "7%", bottom: "10%"}}> <i className="fa fa-plus"></i> </button>
+            }
             <div className="modal fade myModal" id="staticBackdrop" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
