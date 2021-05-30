@@ -9,11 +9,13 @@ export default function FeedPost(props) {
     const [openComment,setOpenComment] = useState(false);
     const [commentList,setCommentList] = useState([]);
     const [loading,setloading] = useState(false);
-    const [page,setPage] = useState(1);
+    const [page,setPage] = useState(0);
     const [count,setCount] = useState(props.comment);
     const limit = 3;
     const [user,setUser] = useState(null);
     const commentContent = useRef("");
+
+    
 
     useEffect(() => {
         const Observable = currentUser.subscribe((u) => {
@@ -30,17 +32,22 @@ export default function FeedPost(props) {
         setReadMore(!readMore);
     }
 
-    function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-    }
+    let CheckDuplicate = (idx) => {
 
-    let loadComment = async() => {
-        if(setCommentList.length > 0){
-            await setPage(prev => prev + 1);
+        for(let i=0;i<commentList.length;i++){
+            if(commentList[i].key === idx){
+                return false            
+            }
         }
         
+        return true;
+    }
+
+    let loadComment = async () => {
+        
+        
         setloading(true);
-        fetch('http://localhost:7000/api/post/commentList?page='+page+'&limit='+limit,{
+        fetch('http://localhost:7000/api/post/commentList?page='+parseInt(page+1)+'&limit='+limit,{
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -48,17 +55,31 @@ export default function FeedPost(props) {
             body: JSON.stringify({
                 postId: props._id
             })
-        }).then(res => res.json()).then(doc => {
-            let tempArray = [...commentList,...doc];
-            setCommentList(tempArray.filter(onlyUnique) || []);
+        }).then(res => res.json()).then(async(doc) => {
+            // let tempArray = [...commentList,...doc];
+            // setCommentList(tempArray.filter(onlyUnique) || []);
+            let temp = commentList;
+            doc.map((data) => {
+                if(CheckDuplicate(data._id)){
+                    let ele = (
+                        <div key={data._id} className="rounded float-end d-flex flex-column px-1 py-1" style={{rowGap: '0.5rem'}}>
+                            <div className="d-flex align-items-center" style={{columnGap: '0.5rem'}}><img src={flower} className="rounded-circle" style={{width: '30px',height: "30px"}}></img> <h6>{data.username}</h6></div>
+                            <p>{data.content}</p>                           
+                        </div>
+                    )
+                    temp.push(ele);
+                }
+            })
+            setCommentList(temp);
+            setloading(false);
+            setPage(prev => prev + 1)
         })
-        setloading(false);
+        
     }
 
     let CommentToggle = ()=>{
         if(openComment === false){
             if(commentList.length === 0){
-                console.log("load")
                 loadComment();
             }
         }
@@ -76,14 +97,19 @@ export default function FeedPost(props) {
             let temp = commentContent.current.value;
             commentContent.current.value = ""
             let AddCommentResponse = await AddComment(temp,user.id,props._id);
-            // console.log(AddCommentResponse);
             if(AddCommentResponse){
                 AddCommentResponse.username = user.username;
-                // delete AddCommentResponse._v;
-                console.log(AddCommentResponse);
-                let tempArray = [{_id: AddCommentResponse._id,authorId: AddCommentResponse.authorId,postId: AddCommentResponse.postId,content: AddCommentResponse.content,username: AddCommentResponse.username},...commentList];
-                console.log(tempArray); 
-                setCommentList(tempArray.filter(onlyUnique) || []);
+                let temp = commentList;
+                if(CheckDuplicate(AddCommentResponse._id)){
+                    let ele = (
+                        <div key={AddCommentResponse._id} className="rounded float-end d-flex flex-column px-1 py-1" style={{rowGap: '0.5rem'}}>
+                            <div className="d-flex align-items-center" style={{columnGap: '0.5rem'}}><img src={flower} className="rounded-circle" style={{width: '30px',height: "30px"}}></img> <h6>{AddCommentResponse.username}</h6></div>
+                            <p>{AddCommentResponse.content}</p>                           
+                        </div>
+                    )
+                    temp.unshift(ele);
+                }
+                setCommentList(temp);
                 setCount(prev => prev + 1);
             }
         }
@@ -113,14 +139,17 @@ export default function FeedPost(props) {
                 openComment && 
                 <>
                     <div className="d-flex flex-column justify-content-between align-items-start px-3 py-3" style={{overflowY: 'scroll',rowGap: "0.7rem",maxHeight: "200px"}}>
-                    {commentList.map(cmt => 
-                    <div key={cmt._id} className="rounded float-end d-flex flex-column px-1 py-1" style={{rowGap: '0.5rem'}}>
-                        <div className="d-flex align-items-center" style={{columnGap: '0.5rem'}}><img src={flower} className="rounded-circle" style={{width: '30px',height: "30px"}}></img> <h6>{cmt.username}</h6></div>
-                        <p>{cmt.content}</p>                           
-                    </div> 
-                    )}
+                    {/* {commentList.map(cmt => {
+                        return (
+                        <div key={cmt._id} className="rounded float-end d-flex flex-column px-1 py-1" style={{rowGap: '0.5rem'}}>
+                            <div className="d-flex align-items-center" style={{columnGap: '0.5rem'}}><img src={flower} className="rounded-circle" style={{width: '30px',height: "30px"}}></img> <h6>{cmt.username}</h6></div>
+                            <p>{cmt.content}</p>                           
+                        </div>)}
+                    )} */}
 
-                        {console.log(commentList,count)}
+                    {commentList.map(cmt => cmt)}
+
+                        
                     {commentList.length !== count && !loading && <button className="btn btn-outline-secondary waves-effect" style={{paddingBottom: "2px", paddingTop: "2px", textAlign: "center", width: "20%" }} onClick={loadComment}> Load More </button>}
                     {loading && <b className="text-center">Loading....</b>}    
 
