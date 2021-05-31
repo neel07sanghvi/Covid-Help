@@ -25,9 +25,7 @@ function Navigation(){
                     {user !== null ? 
                         <div className="dropdown">
                             <div className="d-flex align-items-center" style={{columnGap: "0.5rem", marginRight: "1rem"}}>
-                                {/* <i className="fa fa-user-circle-o"></i> */}
                                 <img src={flower} width={25} height={25} className="rounded-circle"></img>
-                                {/* <p>{user.username}</p> */}
                             </div> 
                              <div className="dropdown-content align-items-left">
                                     <a href="/profile"><i className="fa fa-user-circle-o"></i> Profile</a>

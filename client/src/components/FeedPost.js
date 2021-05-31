@@ -76,10 +76,8 @@ export default function FeedPost(props) {
             let temp = commentContent.current.value;
             commentContent.current.value = ""
             let AddCommentResponse = await AddComment(temp,user.id,props._id);
-            // console.log(AddCommentResponse);
             if(AddCommentResponse){
                 AddCommentResponse.username = user.username;
-                // delete AddCommentResponse._v;
                 console.log(AddCommentResponse);
                 let tempArray = [{_id: AddCommentResponse._id,authorId: AddCommentResponse.authorId,postId: AddCommentResponse.postId,content: AddCommentResponse.content,username: AddCommentResponse.username},...commentList];
                 console.log(tempArray); 
@@ -90,14 +88,22 @@ export default function FeedPost(props) {
     }
 
     return (
-        <div className="col-lg-10 col-md-11 col-12 border-top border-dark rounded shadow bg-white mt-2 mb-3 mx-auto p-2 d-flex flex-column justify-content-between" style={{rowGap: '1rem'}}>
-            <div className="col-12 d-flex flex-column" style={{rowGap: "1rem"}}>
-                <div className="d-flex justify-content-between align-items-center px-2" style={{columnGap: "1rem"}}>
+        <div className="main-div col-lg-10 col-md-11 col-12 border-top border-dark rounded shadow bg-white mt-2 mb-3 mx-auto p-2 d-flex flex-column justify-content-between" style={{rowGap: '1rem'}}>
+            <div className="main-div2 col-12 d-flex flex-column" style={{rowGap: "1rem"}}>
+                <div className=" main-div3 d-flex justify-content-between align-items-center px-2" style={{columnGap: "1rem"}}>
                     <div className="d-flex align-items-center" style={{columnGap: "1rem"}}>
                         <img src={flower} width={70} height={70} className="rounded-circle"></img>
                         <p className="fw-bold fs-4">{props.username}</p>
                     </div>
-                    <i className="fa fa-ellipsis-v align-self-start"></i>
+                    <div className="dropdown align-self-start">
+                        <div className="" style={{columnGap: "0.5rem", marginRight: "1rem"}}>
+                            <i className="fa fa-ellipsis-v align-self-start"></i>
+                        </div> 
+                        <div className="dropdown-content align-items-left">
+                            <a><i className="fa fa-edit"></i> Edit</a>
+                            <a><i className="fa fa-delete"></i> Delete</a>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <p className={"mt-2 w-100 fw-normal "+ (!readMore ? " read-less" : "")}>{props.caption}</p>
