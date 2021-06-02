@@ -29,8 +29,6 @@ async function AddPost(description,country,state,city){
 }
 
 async function AddComment(content,authorId,postId){
-
-    // console.log(content,authorId,postId)
     return fetch('http://localhost:7000/api/post/addComment',{
         method: "POST",
         headers: {

@@ -40,7 +40,6 @@ export default function Signup() {
         }
         window.alert(message);
         if(addPostresponse?.status){
-            console.log("entered")
             return window.location = '/login'
         }
     }

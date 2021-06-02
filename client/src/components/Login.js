@@ -10,7 +10,6 @@ export default function Login() {
     let HandleLogin = (e) => {
         e.preventDefault();
         let loginResponse = login(usernameOREmail.current.value,password.current.value).then(data => {
-            console.log(data);
             if(data.status){
                 window.location = "/"
             }

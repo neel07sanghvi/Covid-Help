@@ -3,7 +3,6 @@ import { BehaviorSubject } from 'rxjs';
 
 let getUser = () => {
     let token = localStorage.getItem("UserToken") || null;
-    console.log(token);
     if(token === null){
         return null;
     }
@@ -49,9 +48,6 @@ async function login(usernameOREmail,password){
             password: password
         })
     }).then(res => res.json()).then(data => {
-
-        console.log(data)
-
         if(data.status){
             localStorage.setItem("UserToken",data.token);
             currentUser.next(getUser());
