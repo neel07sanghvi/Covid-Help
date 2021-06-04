@@ -76,8 +76,17 @@ function usePost(){
             city: city
         }));
     }
+    let IncreaseCount = () => {
+        setCount(prev => prev + 1);
+    }
+    let DecreaseCount = (id) => {
+        setCount(prev => prev - 1);
+        let TempList = list;
+        TempList.filter((pst) => pst._id !== id)
+        setlist(TempList)
+    }
 
-    return {loading,list,count,page,HandleQuery,UpdatePage};
+    return {loading,list,count,page,HandleQuery,UpdatePage, IncreaseCount, DecreaseCount};
 }
 
 export default usePost;

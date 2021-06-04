@@ -1,14 +1,14 @@
 import React , {useRef , useState , useEffect} from 'react';
 import FeedPost from './FeedPost';
 import usePost from './usePost';
-import { AddPost } from '../api/Post';
+import { AddPost, DeletePost } from '../api/Post';
 import { currentUser } from '../api/User'
     
 
 function Feed() {
    
 
-    const {loading,list,count,page,HandleQuery,UpdatePage} = usePost()
+    const {loading,list,count,page,HandleQuery,UpdatePage, IncreaseCount} = usePost()
     
     const country = useRef("");
     const state = useRef("");
@@ -45,18 +45,22 @@ function Feed() {
             return;
         }
 
-        let addPostresponse = await AddPost(description.current.value , addCountry.current.value , addState.current.value , addCity.current.value)
+        let addPostresponse = await AddPost(description.current.value , addCountry.current.value , addState.current.value , addCity.current.value,user.id)
         description.current.value = "";
         addCountry.current.value = "";
         addCity.current.value = "";
         addState.current.value = "";
-
+        if(addPostresponse){
+            IncreaseCount();
+        }
         let message = "Post Added Sucessfully...";
         if(!addPostresponse){
             message = "Ooops! Something went wrong.";
         }
         window.alert(message);
     }
+
+    
     
     return (
         <>

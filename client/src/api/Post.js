@@ -7,7 +7,7 @@ async function GetPost(){
         return false;
     })
 }
-async function AddPost(description,country,state,city){
+async function AddPost(description,country,state,city,userId){
 
     
     return fetch('http://localhost:7000/api/post/insert',{
@@ -20,6 +20,7 @@ async function AddPost(description,country,state,city){
             country: country,
             state: state,
             city: city,
+            userId: userId
         })
     }).then(res => res.json()).then(data => {
         return data;
@@ -42,4 +43,27 @@ async function AddComment(content,authorId,postId){
     }).then(res => res.json()).then(data => data).catch(err => false)   
 }
 
-export {GetPost , AddPost, AddComment};
+async function EditPost(country, city, caption, state,id){
+    return fetch(`http://localhost:7000/api/post/edit/${id}`,{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            country: country,
+            city: city,
+            state: state,
+            caption: caption
+        })
+    }).then(res => res.json()).then(data => data).catch(err => ({state: false, message: "Some Error Occured"}))  
+}
+async function DeletePost(id){
+    return fetch(`http://localhost:7000/api/post/delete/${id}`,{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }).then(res => res.json()).then(data => data).catch(err => ({state: false, message: "Some Error Occured"}))  
+}
+
+export {GetPost , AddPost, AddComment, EditPost, DeletePost};

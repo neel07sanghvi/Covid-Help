@@ -12,7 +12,7 @@ app.post('/insert', (req,res) => {
         country: req.body.country,
         state: req.body.state,
         city: req.body.city,
-        authorId: mongoose.Types.ObjectId("60a9ee29a5a6319c50f540bd"),
+        authorId: mongoose.Types.ObjectId(req.body.userId),
     })
 
     Post.save().then(doc => {
@@ -149,6 +149,63 @@ app.post('/commentList', (req,res) => {
         res.json(doc);
     })
 
+})
+
+app.post('/edit/:id',(req,res) => {
+
+    try{
+        postSchema.findByIdAndUpdate(req.params.id,{
+            $set:{
+                country: req.body.country,
+                state: req.body.state,
+                city: req.body.city,
+                caption: req.body.caption,
+            }
+        }).then((data) => {
+            if(!data){
+                res.json({
+                    status: false,
+                    message: "Some Error Occured"
+                })
+            }
+            else{
+                res.json({
+                    status: true,
+                    message: "Updated Successfully",
+                })
+            }
+        })
+    }catch(err){
+        res.json({
+            status: false,
+            message: "Some Error Occured"
+        })   
+    }
+})
+app.post('/delete/:id',(req,res) => {
+
+    try{
+        postSchema.findByIdAndDelete(req.params.id).then((data) => {
+            if(!data){
+                res.json({
+                    status: false,
+                    message: "Some Error Occured"
+                })
+            }
+            else{
+                res.json({
+                    status: true,
+                    message: "Deleted Successfully",
+                })
+            }
+        })
+    }
+    catch(err){
+        res.json({
+            status: false,
+            message: "Some Error Occured"
+        })   
+    }
 })
 
 

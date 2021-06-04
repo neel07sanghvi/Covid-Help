@@ -1,7 +1,8 @@
 import React, { useState,useEffect, useRef } from 'react'
 import flower from './download.jfif';
 import { currentUser } from '../api/User'
-import {AddComment} from '../api/Post'
+import {AddComment, DeletePost, EditPost} from '../api/Post'
+import usePost from './usePost';
 
 export default function FeedPost(props) {
     props = props.post
@@ -14,9 +15,9 @@ export default function FeedPost(props) {
     const limit = 3;
     const [user,setUser] = useState(null);
     const commentContent = useRef("");
-
+    const {DecreaseCount} = usePost()
     
-
+    
     useEffect(() => {
         const Observable = currentUser.subscribe((u) => {
             setUser(u);
@@ -27,7 +28,7 @@ export default function FeedPost(props) {
         }
     },[])    
     
-
+    
     let Toggler = () => {
         setReadMore(!readMore);
     }
@@ -111,6 +112,26 @@ export default function FeedPost(props) {
         }
     }
 
+    let HandleEditPost = async () => {
+        let Response = await EditPost(props._id);
+        if(Response.status){
+            props.caption = "editCpation"
+        }
+        else{
+            // Handl Error
+        }
+    }
+
+    let HandleDeletePost = async () => {
+        let Response = await DeletePost(props._id);
+        if(Response.status){
+           DecreaseCount(props._id);
+        }
+        else{
+            // Handl Error
+        }
+    }
+
     return (
         <div className="main-div col-lg-10 col-md-11 col-12 border-top border-dark rounded shadow bg-white mt-2 mb-3 mx-auto p-2 d-flex flex-column justify-content-between" style={{rowGap: '1rem'}}>
             <div className="main-div2 col-12 d-flex flex-column" style={{rowGap: "1rem"}}>
@@ -119,15 +140,15 @@ export default function FeedPost(props) {
                         <img src={flower} width={70} height={70} className="rounded-circle"></img>
                         <p className="fw-bold fs-4">{props.username}</p>
                     </div>
-                    <div className="dropdown align-self-start">
+                    {props.authorId===user?.id && <div className="dropdown align-self-start">
                         <div className="" style={{columnGap: "0.5rem", marginRight: "1rem"}}>
                             <i className="fa fa-ellipsis-v align-self-start"></i>
                         </div> 
-                        <div className="dropdown-content align-items-left">
+                        <div className="dropdown-content">
                             <a><i className="fa fa-edit"></i> Edit</a>
-                            <a><i className="fa fa-trash"></i> Delete</a>
+                            <a onClick={HandleDeletePost}><i className="fa fa-trash"></i> Delete</a>
                         </div>
-                    </div>
+                    </div>}
                 </div>
                 <div>
                     <p className={"mt-2 w-100 fw-normal "+ (!readMore ? " read-less" : "")}>{props.caption}</p>
