@@ -15,7 +15,12 @@ export default function FeedPost(props) {
     const limit = 3;
     const [user,setUser] = useState(null);
     const commentContent = useRef("");
-    const {DecreaseCount} = usePost()
+    const {DecreaseCount} = usePost();
+
+    const description = useRef("");
+    const addCountry = useRef("");
+    const addState = useRef("");
+    const addCity = useRef("");
     
     
     useEffect(() => {
@@ -115,10 +120,14 @@ export default function FeedPost(props) {
     let HandleEditPost = async () => {
         let Response = await EditPost(props._id);
         if(Response.status){
-            props.caption = "editCpation"
+            props.caption = Response.caption;
+            props.country = Response.country;
+            props.state = Response.state;
+            props.city = Response.city;
         }
         else{
-            // Handl Error
+            window.alert(Response.message);
+            return;
         }
     }
 
@@ -128,7 +137,8 @@ export default function FeedPost(props) {
            DecreaseCount(props._id);
         }
         else{
-            // Handl Error
+            window.alert(Response.message);
+            return;
         }
     }
 
@@ -141,11 +151,11 @@ export default function FeedPost(props) {
                         <p className="fw-bold fs-4">{props.username}</p>
                     </div>
                     {props.authorId===user?.id && <div className="dropdown align-self-start">
-                        <div className="" style={{columnGap: "0.5rem", marginRight: "1rem"}}>
+                        <div style={{columnGap: "0.5rem", marginRight: "1rem", paddingLeft: "7rem"}}>
                             <i className="fa fa-ellipsis-v align-self-start"></i>
                         </div> 
                         <div className="dropdown-content">
-                            <a><i className="fa fa-edit"></i> Edit</a>
+                            <a data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i className="fa fa-edit"></i> Edit</a>
                             <a onClick={HandleDeletePost}><i className="fa fa-trash"></i> Delete</a>
                         </div>
                     </div>}
@@ -153,6 +163,34 @@ export default function FeedPost(props) {
                 <div>
                     <p className={"mt-2 w-100 fw-normal "+ (!readMore ? " read-less" : "")}>{props.caption}</p>
                     <p onClick={Toggler} style={{color:"blue", cursor:"pointer", textDecoration:"underline"}}>{readMore ? "less" : "more"}</p>
+                </div>
+            </div>
+            <div className="modal fade myModal" id="staticBackdrop" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="staticBackdropLabel">Post</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-dialog modal-dialog-centered" style={{pointerEvents: 'auto'}}>
+                        <form className="mx-auto d-grid" style={{rowGap: "0.5rem"}}>
+                            <label>Description</label>
+                            <textarea rows="5" ref={description} required></textarea>
+                            {/* <label>Image</label>
+                            <input type="file"></input> */}
+                            <label>Country</label>
+                            <input ref={addCountry} required></input>
+                            <label>State</label>
+                            <input ref={addState} required></input>
+                            <label>City</label>
+                            <input ref={addCity} required></input>
+                        </form>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="AddPostBtn" className="btn btn-primary" onClick={HandleEditPost}>Post</button>
+                    </div>
+                    </div>
                 </div>
             </div>
             <img src={flower} className="w-100"></img>

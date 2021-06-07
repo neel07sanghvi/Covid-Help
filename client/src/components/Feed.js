@@ -65,7 +65,7 @@ function Feed() {
     return (
         <>
             <form onSubmit={(e) => {e.preventDefault(); HandleQuery(country.current.value,state.current.value,city.current.value)}}>
-                <div className="form-row align-items-center d-flex col-9 justify-content-center" style={{columnGap: "0.5rem", marginLeft: "16%",}}>
+                <div className="form-row align-items-center d-flex col-9 justify-content-center" style={{columnGap: "0.5rem", marginLeft: "16%"}}>
                     <div className="col-xs-4 mt-2">
                         <input type="text" className="form-control mt-2" ref={country} placeholder="Country"></input>
                     </div>
@@ -97,7 +97,7 @@ function Feed() {
                 <div className="modal-dialog">
                     <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title" id="staticBackdropLabel">Add Post</h5>
+                        <h5 className="modal-title" id="staticBackdropLabel">Post</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-dialog modal-dialog-centered" style={{pointerEvents: 'auto'}}>
@@ -116,7 +116,7 @@ function Feed() {
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="AddPostBtn" className="btn btn-primary" onClick={HandleAddPost}>Add Post</button>
+                        <button type="button" id="AddPostBtn" className="btn btn-primary" onClick={HandleAddPost}>Post</button>
                     </div>
                     </div>
                 </div>
