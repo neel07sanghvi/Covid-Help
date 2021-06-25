@@ -55,7 +55,7 @@ async function EditPost(country, city, caption, state,id){
             state: state,
             caption: caption
         })
-    }).then(res => res.json()).then(data => data).catch(err => ({state: false, message: "Some Error Occured"}))  
+    }).then(res => res.json()).then(data => data).catch(err => ({status: false, message: "Some Error Occured"}))  
 }
 async function DeletePost(id){
     return fetch(`http://localhost:7000/api/post/delete/${id}`,{
@@ -63,7 +63,11 @@ async function DeletePost(id){
         headers: {
             "Content-Type": "application/json",
         }
-    }).then(res => res.json()).then(data => data).catch(err => ({state: false, message: "Some Error Occured"}))  
+    }).then(res => res.json()).then(data => data).catch(err => ({status: false, message: "Unable To Delete"}))  
 }
 
-export {GetPost , AddPost, AddComment, EditPost, DeletePost};
+async function getUserPost(id) {
+    return fetch(`http://localhost:7000/api/post/posts/${id}`).then(res => res.json()).then(data => data).catch(err => ({status: false, message: "Unable To Get Post"}))
+}
+
+export {GetPost , AddPost, AddComment, EditPost, DeletePost, getUserPost};

@@ -25,6 +25,21 @@ app.post('/insert', (req,res) => {
     })
 })
 
+app.get('/posts/:id',(req,res) => {
+    postSchema.find({authorId: req.params.id}).then((data) => {
+        res.json({
+            status: true,
+            data: data,
+            message: "Successfull"
+        })
+    }).catch(err => {
+        res.json({
+            status: false,
+            message: "Something Went Wrong"
+        })
+    })
+})
+
 app.get('/list',(req,res) => {
 
     let country = req.query.country;

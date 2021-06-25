@@ -14,7 +14,7 @@ function usePost(){
         city: ""
     });
 
-    const limit = 3;
+    const limit = 15;
 
     useEffect(async () => {
         const c = axios.CancelToken.source();
@@ -43,16 +43,17 @@ function usePost(){
 
         setPage(1);
         const c = axios.CancelToken.source();
-        const url = 'http://localhost:7000/api/post/list?page='+page+'&limit='+limit+'&country='+query.country+'&state='+query.state+'&city='+query.city
+        const url = 'http://localhost:7000/api/post/list?page='+1+'&limit='+limit+'&country='+query.country+'&state='+query.state+'&city='+query.city
         setloading(true)
         axios.get(url,{cancelToken: c.token}).then(data => {
             data = data.data;
             if(data.data !== undefined){
                 setCount(data.data)
                 setlist(data.doc);
+                console.log(list)
             }
             else{
-                setlist(data);
+                setlist([]);
             }
 
             
